@@ -7,3 +7,23 @@
 ![GitHub Release Date - Published_At](https://img.shields.io/github/release-date/geeeezmo/event-web-scout)
 
 ![PyPI - Version](https://img.shields.io/pypi/v/event-web-scout?label=PyPI%20version)
+
+Plugin configuration is a JSON with `plugins` root element,
+containing an array of configurations for individual plugins.
+Each configuration has 3 properties:
+- `name` - name of the plugin (name of the plugin package)
+- `priority` - priority of plugin execution (lower number = higher priority); plugins with the same priority value will be executed in alphabetical order
+- `enabled` - whether the plugin is enabled
+
+
+```json
+{
+  "plugins": [
+    {
+      "name": "<plugin name>",
+      "priority": 3,
+      "enabled": true
+    }
+  ]
+}
+```
