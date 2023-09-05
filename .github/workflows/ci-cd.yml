@@ -22,7 +22,9 @@ jobs:
         pip install wheel
     - name: Extract tag name
       id: tag
-      run: echo ::set-output name=TAG_NAME::$(echo $GITHUB_REF | cut -d / -f 3)
+      run: |
+        FULL_TAG_NAME=$(echo $GITHUB_REF | cut -d / -f 3)
+        echo ::set-output name=TAG_NAME::${FULL_TAG_NAME#v}
     - name: Update version in setup.py
       run: >-
         sed -i "s/{{VERSION_PLACEHOLDER}}/${{ steps.tag.outputs.TAG_NAME }}/g" setup.py
