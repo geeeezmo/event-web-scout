@@ -11,6 +11,8 @@ jobs:
     name: Build and publish Python 🐍 distributions 📦 to PyPI
     environment: PyPI publishing
     runs-on: ubuntu-22.04
+    permissions:
+      id-token: write  # IMPORTANT: this permission is mandatory for trusted publishing
     steps:
     - uses: actions/checkout@master
     - name: Set up Python 3.11
@@ -33,6 +35,6 @@ jobs:
       run: >-
         python setup.py sdist bdist_wheel
     - name: Publish distribution 📦 to PyPI
-      uses: pypa/gh-action-pypi-publish@master
+      uses: pypa/gh-action-pypi-publish@v1.8.10
       with:
         password: ${{ secrets.PYPI_API_TOKEN }}
