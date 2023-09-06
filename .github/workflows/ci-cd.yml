@@ -28,7 +28,7 @@ jobs:
       id: tag
       run: |
         FULL_TAG_NAME=$(echo $GITHUB_REF | cut -d / -f 3)
-        echo ::set-output name=TAG_NAME::${FULL_TAG_NAME#v}
+        echo "{TAG_NAME}=${FULL_TAG_NAME#v}" >> $GITHUB_OUTPUT
     - name: Update version in setup.py
       run: >-
         sed -i "s/{{VERSION_PLACEHOLDER}}/${{ steps.tag.outputs.TAG_NAME }}/g" setup.py
