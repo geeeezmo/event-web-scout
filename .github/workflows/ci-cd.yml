@@ -27,7 +27,7 @@ jobs:
       id: tag
       run: |
         FULL_TAG_NAME=$(echo $GITHUB_REF | cut -d / -f 3)
-        echo "{TAG_NAME}=${FULL_TAG_NAME#v}" >> $GITHUB_OUTPUT
+        echo "TAG_NAME=${FULL_TAG_NAME#v}" >> $GITHUB_OUTPUT
     - name: Update version in setup.cfg
       run: >-
         sed -i "s/{{VERSION_PLACEHOLDER}}/${{ steps.tag.outputs.TAG_NAME }}/g" setup.cfg
