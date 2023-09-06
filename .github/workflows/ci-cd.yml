@@ -11,9 +11,6 @@ jobs:
     name: Build and publish Python 🐍 distributions 📦 to PyPI
     environment: PyPI publishing
     runs-on: ubuntu-22.04
-    defaults:
-      run:
-        working-directory: event-web-scout
     steps:
     - uses: actions/checkout@master
     - name: Set up Python 3.11
@@ -29,9 +26,9 @@ jobs:
       run: |
         FULL_TAG_NAME=$(echo $GITHUB_REF | cut -d / -f 3)
         echo "{TAG_NAME}=${FULL_TAG_NAME#v}" >> $GITHUB_OUTPUT
-    - name: Update version in setup.py
+    - name: Update version in setup.cfg
       run: >-
-        sed -i "s/{{VERSION_PLACEHOLDER}}/${{ steps.tag.outputs.TAG_NAME }}/g" setup.py
+        sed -i "s/{{VERSION_PLACEHOLDER}}/${{ steps.tag.outputs.TAG_NAME }}/g" setup.cfg
     - name: Build a binary wheel
       run: >-
         python setup.py sdist bdist_wheel
