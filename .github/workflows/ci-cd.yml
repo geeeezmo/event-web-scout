@@ -11,6 +11,9 @@ jobs:
     name: Build and publish Python 🐍 distributions 📦 to PyPI
     environment: PyPI publishing
     runs-on: ubuntu-22.04
+    strategy:
+      matrix:
+        dir: ['.', 'plugins/example-plugin']
     permissions:
       id-token: write  # IMPORTANT: this permission is mandatory for trusted publishing
     steps:
@@ -21,8 +24,9 @@ jobs:
         python-version: '3.11'
     - name: Install pypa/setuptools
       run: >-
-        python -m
-        pip install wheel
+        python -m pip install --upgrade pip
+        pip install build
+        pip install -r requirements.txt
     - name: Extract tag name
       id: tag
       run: |
@@ -33,6 +37,6 @@ jobs:
         sed -i "s/{{VERSION_PLACEHOLDER}}/${{ steps.tag.outputs.TAG_NAME }}/g" setup.cfg
     - name: Build a binary wheel
       run: >-
-        python setup.py sdist bdist_wheel
+        python -m build
     - name: Publish distribution 📦 to PyPI
       uses: pypa/gh-action-pypi-publish@v1.8.10
