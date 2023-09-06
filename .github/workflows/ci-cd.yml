@@ -21,6 +21,15 @@ jobs:
       id-token: write  # IMPORTANT: this permission is mandatory for trusted publishing
     steps:
     - uses: actions/checkout@v4.0.0
+    - name: Extract tag name
+      id: tag
+      run: |
+        FULL_TAG_NAME=$(echo $GITHUB_REF | cut -d / -f 3)
+        echo "TAG_NAME=${FULL_TAG_NAME#v}" >> $GITHUB_OUTPUT
+    - name: Update version in setup.cfg and requirements.txt
+      run: |
+        sed -i "s/{{VERSION_PLACEHOLDER}}/${{ steps.tag.outputs.TAG_NAME }}/g" setup.cfg
+        if [ -f requirements.txt ]; then sed -i "s/{{VERSION_PLACEHOLDER}}/${{ steps.tag.outputs.TAG_NAME }}/g" requirements.txt; fi
     - name: Set up Python 3.11
       uses: actions/setup-python@v3
       with:
@@ -30,15 +39,6 @@ jobs:
         python -m pip install --upgrade pip
         pip install build
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-    - name: Extract tag name
-      id: tag
-      run: |
-        FULL_TAG_NAME=$(echo $GITHUB_REF | cut -d / -f 3)
-        echo "TAG_NAME=${FULL_TAG_NAME#v}" >> $GITHUB_OUTPUT
-    - name: Update version in setup.cfg and requirements.txt
-      run: |
-        sed -i "s/{{VERSION_PLACEHOLDER}}/${{ steps.tag.outputs.TAG_NAME }}/g" setup.cfg
-        sed -i "s/{{VERSION_PLACEHOLDER}}/${{ steps.tag.outputs.TAG_NAME }}/g" requirements.txt
     - name: Build a binary wheel
       run: >-
         python -m build
