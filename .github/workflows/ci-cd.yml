@@ -6,13 +6,17 @@ on:
      - '*'
 
 jobs:
-  build-n-publish:
+  # todo: add publish job for example-plugin
+  build-n-publish-main:
     name: Build and publish Python 🐍 distributions 📦 to PyPI
     environment: PyPI publishing
     runs-on: ubuntu-22.04
+    defaults:
+      run:
+        working-directory: event-web-scout
     steps:
     - uses: actions/checkout@master
-    - name: Set up Python 3.10
+    - name: Set up Python 3.11
       uses: actions/setup-python@v3
       with:
         python-version: '3.11'
