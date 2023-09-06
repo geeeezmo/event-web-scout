@@ -16,7 +16,8 @@ jobs:
         dir: ['.', 'plugins/example-plugin']
     defaults:
       run:
-        working-directory: ${{ matrix.dir }}
+        shell: bash
+        working-directory: ${{ github.workspace }}/${{ matrix.dir }}
     permissions:
       id-token: write  # IMPORTANT: this permission is mandatory for trusted publishing
     steps:
