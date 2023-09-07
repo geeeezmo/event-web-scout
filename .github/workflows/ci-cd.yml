@@ -6,7 +6,6 @@ on:
      - '*'
 
 jobs:
-  # todo: add publish job for example-plugin
   build-n-publish-main:
     name: Build and publish Python 🐍 distributions 📦 to PyPI
     environment: PyPI publishing
@@ -45,9 +44,8 @@ jobs:
     - name: Build a binary wheel
       run: >-
         python -m build
-    - name: Check directories
-      run: |
-        pwd
-        ls -la
-    # - name: Publish distribution 📦 to PyPI
-    #   uses: pypa/gh-action-pypi-publish@v1.8.10
+    - name: Publish distribution 📦 to PyPI
+      uses: pypa/gh-action-pypi-publish@v1.8.10
+      with:
+        packages-dir: ${{ github.workspace }}/${{ matrix.dir }}/dist/
+        verbose: true

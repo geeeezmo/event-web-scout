@@ -1,1 +1,1 @@
-# event-web-scout-example-plugin
+# event-web-scout-plugin-example
