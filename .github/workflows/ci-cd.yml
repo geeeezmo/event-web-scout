@@ -45,5 +45,9 @@ jobs:
     - name: Build a binary wheel
       run: >-
         python -m build
-    - name: Publish distribution 📦 to PyPI
-      uses: pypa/gh-action-pypi-publish@v1.8.10
+    - name: Check directories
+      run: |
+        pwd
+        ls -la
+    # - name: Publish distribution 📦 to PyPI
+    #   uses: pypa/gh-action-pypi-publish@v1.8.10
