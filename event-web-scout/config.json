@@ -1,9 +1,0 @@
-{
-  "plugins": [
-    {
-      "name": "<plugin name>",
-      "priority": 3,
-      "enabled": true
-    }
-  ]
-}

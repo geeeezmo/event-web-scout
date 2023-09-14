@@ -1,0 +1,15 @@
+{
+  "default": {
+    "calendar_id": "<google_calendar_id>",
+    "plugin_entry_points": [
+      "example"
+    ]
+  },
+  "plugins": [
+    {
+      "name": "<plugin name>",
+      "priority": 3,
+      "enabled": true
+    }
+  ]
+}

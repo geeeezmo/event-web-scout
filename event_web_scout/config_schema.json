@@ -1,0 +1,51 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Generated schema for Root",
+  "type": "object",
+  "properties": {
+    "default": {
+      "type": "object",
+      "properties": {
+        "calendar_id": {
+          "type": "string"
+        },
+        "plugin_entry_points": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "calendar_id",
+        "plugin_entry_points"
+      ]
+    },
+    "plugins": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "priority": {
+            "type": "number"
+          },
+          "enabled": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "name",
+          "priority",
+          "enabled"
+        ]
+      }
+    }
+  },
+  "required": [
+    "default",
+    "plugins"
+  ]
+}
