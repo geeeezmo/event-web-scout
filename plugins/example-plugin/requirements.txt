@@ -1,1 +1,3 @@
-event_web_scout=={{VERSION_PLACEHOLDER}}
+event_web_scout == {{VERSION_PLACEHOLDER}}
+jsonschema == 4.19.0
+typeguard == 4.1.5

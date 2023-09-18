@@ -1,51 +1,86 @@
 {
-  "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "Generated schema for Root",
-  "type": "object",
-  "properties": {
-    "default": {
-      "type": "object",
-      "properties": {
-        "calendar_id": {
-          "type": "string"
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$ref": "#/definitions/Root",
+    "definitions": {
+        "Root": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "plugin_entry_points": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "plugin_defaults": {
+                    "$ref": "#/definitions/PluginDefaults"
+                },
+                "plugins": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Plugin"
+                    }
+                }
+            },
+            "required": [
+                "plugin_defaults",
+                "plugin_entry_points",
+                "plugins"
+            ],
+            "title": "Root"
         },
-        "plugin_entry_points": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
+        "PluginDefaults": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "priority": {
+                    "type": "integer"
+                },
+                "enabled": {
+                    "type": "boolean"
+                },
+                "config": {
+                    "$ref": "#/definitions/PluginConfig"
+                }
+            },
+            "required": [],
+            "title": "PluginDefaults"
+        },
+        "Plugin": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "priority": {
+                    "type": "integer"
+                },
+                "enabled": {
+                    "type": "boolean"
+                },
+                "config": {
+                    "$ref": "#/definitions/PluginConfig"
+                }
+            },
+            "required": [
+                "name"
+            ],
+            "title": "Plugin"
+        },
+        "PluginConfig": {
+            "type": "object",
+            "additionalProperties": true,
+            "properties": {
+                "google_service_account_token_file": {
+                    "type": "string"
+                },
+                "google_calendar_id": {
+                    "type": "string"
+                }
+            },
+            "required": [],
+            "title": "PluginConfig"
         }
-      },
-      "required": [
-        "calendar_id",
-        "plugin_entry_points"
-      ]
-    },
-    "plugins": {
-      "type": "array",
-      "items": {
-        "type": "object",
-        "properties": {
-          "name": {
-            "type": "string"
-          },
-          "priority": {
-            "type": "number"
-          },
-          "enabled": {
-            "type": "boolean"
-          }
-        },
-        "required": [
-          "name",
-          "priority",
-          "enabled"
-        ]
-      }
     }
-  },
-  "required": [
-    "default",
-    "plugins"
-  ]
 }

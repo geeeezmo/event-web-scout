@@ -1,15 +1,23 @@
 {
-  "default": {
-    "calendar_id": "<google_calendar_id>",
-    "plugin_entry_points": [
-      "example"
-    ]
+  "plugin_entry_points": [
+    "example_plugins"
+  ],
+  "plugin_defaults": {
+    "priority": 10,
+    "enabled": false,
+    "config": {
+      "google_service_account_token_file": "google_service_account_token.json",
+      "google_calendar_id": "<google_calendar_id>"
+    }
   },
   "plugins": [
     {
-      "name": "<plugin name>",
+      "name": "example_plugin",
       "priority": 3,
-      "enabled": true
+      "enabled": true,
+      "config": {
+        "example_prop_1": "example_value_1"
+      }
     }
   ]
 }
