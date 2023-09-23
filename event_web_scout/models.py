@@ -1,8 +1,6 @@
 from .plugin_interface import PluginInterface
-# from typeguard import typechecked
 
 class LoggingConfig():
-    # @typechecked
     def __init__(self, log_dir: str, log_file_base_name: str = None, level: str = None, quiet: bool = None, format: str = None):
         self.log_dir = log_dir
         self.log_file_base_name = log_file_base_name
@@ -11,7 +9,6 @@ class LoggingConfig():
         self.format = format
 
 class LoadedPlugin():
-    # @typechecked
     def __init__(self, priority: int, name: str, config: object, _class: PluginInterface):
         self.priority = priority
         self.name = name

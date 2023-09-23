@@ -9,7 +9,6 @@ import logging.handlers
 import os
         
 loaded_plugins: list[LoadedPlugin] = []
-# logging_config: LoggingConfig = None
 
 with ExitStack() as stack:
     script_dir = os.path.dirname(os.path.abspath(__file__))
@@ -40,8 +39,7 @@ with ExitStack() as stack:
     try:
         validate(instance=config, schema=config_schema)
     except Exception as e:
-        logging.error(f'Plugin config validation error: {e}')
-        print(f'Plugin config validation error: {e}')
+        print(f'Config validation error: {e}')
 
     logging_config_json = config.get('logging', {})
     logging_config = LoggingConfig(
@@ -57,7 +55,6 @@ with ExitStack() as stack:
         discovered_plugins = entry_points(group=entry_point)
 
         logging.info(f'discovered_plugins for entry point {entry_point}: {discovered_plugins}')
-        # print(f'discovered_plugins for entry point {entry_point}: {discovered_plugins}')
 
         for plugin in discovered_plugins:
             # print(f'discovered plugin: {plugin}')
@@ -69,12 +66,10 @@ with ExitStack() as stack:
                 loaded_plugin = LoadedPlugin(priority, plugin.name, plugin_config.get('config'), plugin_class)
                 loaded_plugins.append(loaded_plugin)
                 logging.info(f'loaded_plugin: {loaded_plugin.name}; priority: {priority}')
-                # print(f'loaded_plugin: {loaded_plugin.name}; priority: {priority}')
 
 def exec_loaded_plugins():
     for plugin in sorted(loaded_plugins, key=lambda p: (p.priority, p.name)):
         logging.info(f'plugin {plugin.name} with priority {plugin.priority}')
-        # print(f'plugin {plugin.name} with priority {plugin.priority}')
         plugin.new_instance().run()
 
 __all__ = [
