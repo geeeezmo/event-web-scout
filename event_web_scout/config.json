@@ -1,4 +1,8 @@
 {
+  "logging": {
+    "level": "INFO",
+    "log_file_base_name": "event_web_scout"
+  },
   "plugin_entry_points": [
     "example_plugins"
   ],

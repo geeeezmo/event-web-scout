@@ -8,7 +8,12 @@
 
 ![PyPI - Version](https://img.shields.io/pypi/v/event-web-scout?label=PyPI%20version)
 
-Configuration is a JSON with 3 elements:
+Configuration is a JSON with 4 elements:
+- `logging` - logging config
+  - `level` - logging level (defaults to `ERROR` if not provided)
+  - `log_file_base_name` - base name of the logging file (defaults to `event_web_scout`); will be suffixed with the date of the script launch and `.log`
+  - `quiet` - sets logging level to `ERROR`
+  - `format` - logging message format (defaults to `[%(levelname)s][%(name)s]%(asctime)s - %(message)s`)
 - `plugin_entry_points` - list of entry points that will be scanned for plugins
 - `plugin_defaults` - default plugin config (overriden by config defined explicitly for each individual plugin); default value is an empty object
 - `plugins`- array of configurations for individual plugins; each configuration has 3 properties:
@@ -20,6 +25,12 @@ Configuration is a JSON with 3 elements:
 
 ```json
 {
+  "logging": {
+    "level": "INFO",
+    "log_file_base_name": "event_web_scout",
+    "quiet": false,
+    "format": "[%(levelname)s][%(name)s]%(asctime)s - %(message)s"
+  },
   "plugin_entry_points": [
     "example_plugins"
   ],

@@ -1,21 +1,15 @@
 from contextlib import ExitStack
 from jsonschema import validate
-from .plugin_interface import PluginInterface
+from .models import LoadedPlugin, LoggingConfig
+from .utils import init_loggers
 from importlib.metadata import entry_points
 import json
+import logging
+import logging.handlers
 import os
-
-class LoadedPlugin():
-    def __init__(self, priority: int, name: str, config: object, _class: PluginInterface):
-        self.priority = priority
-        self.name = name
-        self.config = config
-        self._class = _class
-
-    def new_instance(self) -> PluginInterface:
-        return self._class(self.config)
         
 loaded_plugins: list[LoadedPlugin] = []
+# logging_config: LoggingConfig = None
 
 with ExitStack() as stack:
     script_dir = os.path.dirname(os.path.abspath(__file__))
@@ -24,6 +18,7 @@ with ExitStack() as stack:
 
     config_file = stack.enter_context(open(os.path.join(script_dir, 'config.json'), 'r'))
     config = json.load(config_file)
+
     plugin_entry_points = config.get('plugin_entry_points', [])
 
     # Merge defaults with each plugin's configuration
@@ -45,11 +40,23 @@ with ExitStack() as stack:
     try:
         validate(instance=config, schema=config_schema)
     except Exception as e:
+        logging.error(f'Plugin config validation error: {e}')
         print(f'Plugin config validation error: {e}')
+
+    logging_config_json = config.get('logging', {})
+    logging_config = LoggingConfig(
+        log_dir = script_dir,
+        log_file_base_name = logging_config_json.get('log_file_base_name'),
+        level = logging_config_json.get('level'),
+        quiet = bool(logging_config_json.get('quiet')),
+        format = logging_config_json.get('format')
+    )
+    init_loggers(logging_config)
 
     for entry_point in plugin_entry_points:
         discovered_plugins = entry_points(group=entry_point)
 
+        logging.info(f'discovered_plugins for entry point {entry_point}: {discovered_plugins}')
         # print(f'discovered_plugins for entry point {entry_point}: {discovered_plugins}')
 
         for plugin in discovered_plugins:
@@ -61,11 +68,18 @@ with ExitStack() as stack:
                 plugin_class = plugin.load()
                 loaded_plugin = LoadedPlugin(priority, plugin.name, plugin_config.get('config'), plugin_class)
                 loaded_plugins.append(loaded_plugin)
+                logging.info(f'loaded_plugin: {loaded_plugin.name}; priority: {priority}')
                 # print(f'loaded_plugin: {loaded_plugin.name}; priority: {priority}')
 
 def exec_loaded_plugins():
     for plugin in sorted(loaded_plugins, key=lambda p: (p.priority, p.name)):
+        logging.info(f'plugin {plugin.name} with priority {plugin.priority}')
         # print(f'plugin {plugin.name} with priority {plugin.priority}')
         plugin.new_instance().run()
 
-__all__ = ['LoadedPlugin', 'loaded_plugins', 'exec_loaded_plugins']
+__all__ = [
+    'LoadedPlugin',
+    'LoggingConfig',
+    'loaded_plugins',
+    'exec_loaded_plugins'
+]

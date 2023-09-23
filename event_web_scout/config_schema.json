@@ -6,6 +6,9 @@
             "type": "object",
             "additionalProperties": false,
             "properties": {
+                "logging": {
+                    "$ref": "#/definitions/Logging"
+                },
                 "plugin_entry_points": {
                     "type": "array",
                     "items": {
@@ -28,6 +31,26 @@
                 "plugins"
             ],
             "title": "Root"
+        },
+        "Logging": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "level": {
+                    "type": "string"
+                },
+                "log_file_base_name": {
+                    "type": "string"
+                },
+                "quiet": {
+                    "type": "boolean"
+                },
+                "format": {
+                    "type": "string"
+                }
+            },
+            "required": [],
+            "title": "Logging"
         },
         "PluginDefaults": {
             "type": "object",
