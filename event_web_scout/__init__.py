@@ -15,7 +15,7 @@ class LoadedPlugin():
     def new_instance(self) -> PluginInterface:
         return self._class(self.config)
         
-loaded_plugins = []
+loaded_plugins: list[LoadedPlugin] = []
 
 with ExitStack() as stack:
     script_dir = os.path.dirname(os.path.abspath(__file__))
@@ -68,4 +68,4 @@ def exec_loaded_plugins():
         # print(f'plugin {plugin.name} with priority {plugin.priority}')
         plugin.new_instance().run()
 
-__all__ = ['loaded_plugins', 'exec_loaded_plugins']
+__all__ = ['LoadedPlugin', 'loaded_plugins', 'exec_loaded_plugins']
