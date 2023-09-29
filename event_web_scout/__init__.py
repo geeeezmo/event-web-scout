@@ -12,11 +12,19 @@ loaded_plugins: list[LoadedPlugin] = []
 
 with ExitStack() as stack:
     script_dir = os.path.dirname(os.path.abspath(__file__))
-    schema_file = stack.enter_context(open(os.path.join(script_dir, 'config_schema.json'), 'r'))
-    config_schema = json.load(schema_file)
 
-    config_file = stack.enter_context(open(os.path.join(script_dir, 'config.json'), 'r'))
-    config = json.load(config_file)
+    try:
+        schema_file = stack.enter_context(open(os.path.join(script_dir, 'config_schema.json'), 'r'))
+        config_schema = json.load(schema_file)
+
+        config_file = stack.enter_context(open(os.path.join(script_dir, 'config.json'), 'r'))
+        config = json.load(config_file)
+    except FileNotFoundError as e:
+        logging.error(f'File does not exist: {e}')
+    except json.JSONDecodeError as jde:
+        logging.error(f'Could not decode JSON: {jde}')
+    except TypeError as te:
+        logging.error(f'Could not decode JSON: {te}')
 
     plugin_entry_points = config.get('plugin_entry_points', [])
 
