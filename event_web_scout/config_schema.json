@@ -9,6 +9,9 @@
                 "logging": {
                     "$ref": "#/definitions/Logging"
                 },
+                "plugin_execution": {
+                    "$ref": "#/definitions/PluginExecution"
+                },
                 "plugin_entry_points": {
                     "type": "array",
                     "items": {
@@ -51,6 +54,19 @@
             },
             "required": [],
             "title": "Logging"
+        },
+        "PluginExecution": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "timeout_seconds": {
+                    "type": "number"
+                }
+            },
+            "required": [
+                "timeout_seconds"
+            ],
+            "title": "PluginExecution"
         },
         "PluginDefaults": {
             "type": "object",

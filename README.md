@@ -15,6 +15,8 @@ Configuration is a JSON with 4 elements:
   - `quiet` - sets logging level to `ERROR`
   - `format` - logging message format (defaults to `[%(levelname)s][%(name)s]%(asctime)s - %(message)s`)
 - `plugin_entry_points` - list of entry points that will be scanned for plugins
+- `plugin_execution` - plugin execution config
+  - `timeout_seconds` - how long a plugin is allowed to run for (in seconds); one setting for all plugins; if not provided, 30 seconds is the default
 - `plugin_defaults` - default plugin config (overriden by config defined explicitly for each individual plugin); default value is an empty object
 - `plugins`- array of configurations for individual plugins; each configuration has 3 properties:
   - `name` - name of the plugin (name of the plugin package)
@@ -34,6 +36,9 @@ Configuration is a JSON with 4 elements:
   "plugin_entry_points": [
     "example_plugins"
   ],
+  "plugin_execution": {
+    "timeout_seconds": 30
+  },
   "plugin_defaults": {
     "priority": 10,
     "enabled": false,
