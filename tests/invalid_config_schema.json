@@ -1,0 +1,22 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$ref": "#/definitions/Root",
+    "definitions": {
+        "Root": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "plugin_entry_points": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            },
+            "required": [
+                "plugin_entry_points"
+            ],
+            "title": "Root"
+        }, // this line yields the JSON invalid
+    }
+}

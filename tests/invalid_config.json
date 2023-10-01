@@ -1,0 +1,5 @@
+{
+  "plugin_entry_points": [
+    "example_plugins"
+  ], // this line yields the JSON invalid
+}

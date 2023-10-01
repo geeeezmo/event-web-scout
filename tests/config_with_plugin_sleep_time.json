@@ -1,0 +1,31 @@
+{
+  "logging": {
+    "level": "INFO",
+    "log_file_base_name": "event_web_scout"
+  },
+  "plugin_entry_points": [
+    "example_plugins"
+  ],
+  "plugin_execution": {
+    "timeout_seconds": 3
+  },
+  "plugin_defaults": {
+    "priority": 10,
+    "enabled": false,
+    "config": {
+      "google_service_account_token_file": "google_service_account_token.json",
+      "google_calendar_id": "<google_calendar_id>"
+    }
+  },
+  "plugins": [
+    {
+      "name": "example_plugin",
+      "priority": 3,
+      "enabled": true,
+      "config": {
+        "example_prop_1": "example_value_1",
+        "sleep_time": 5
+      }
+    }
+  ]
+}
