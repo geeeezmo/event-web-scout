@@ -6,6 +6,9 @@
   "plugin_entry_points": [
     "example_plugins"
   ],
+  "plugin_execution": {
+    "timeout_seconds": 30
+  },
   "plugin_defaults": {
     "priority": 10,
     "enabled": false,

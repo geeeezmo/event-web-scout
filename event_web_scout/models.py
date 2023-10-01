@@ -9,7 +9,7 @@ class LoggingConfig():
         self.format = format
 
 class LoadedPlugin():
-    def __init__(self, priority: int, name: str, config: object, _class: PluginInterface):
+    def __init__(self, priority: int, name: str, config: dict, _class: PluginInterface):
         self.priority = priority
         self.name = name
         self.config = config

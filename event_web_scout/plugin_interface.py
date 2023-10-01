@@ -1,5 +1,3 @@
-from typeguard import typechecked
-
 class PluginInterfaceMeta(type):
     def __init__(cls, name: str, bases, attrs):
         super().__init__(name, bases, attrs)
@@ -8,10 +6,8 @@ class PluginInterfaceMeta(type):
                 raise ValueError(f'Subclass of PluginInterface must have a "name" attribute: {name}')
 
 class PluginInterface(metaclass=PluginInterfaceMeta):
-    @typechecked
-    def __init__(self, config: object = None):
+    def __init__(self, config: dict):
         self.config = config
 
-    @typechecked
     def run(self):
         raise NotImplementedError('Plugins must implement the "run" method')
