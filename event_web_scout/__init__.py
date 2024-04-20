@@ -2,7 +2,7 @@ from contextlib import ExitStack
 from jsonschema import validate
 from .models import LoadedPlugin, LoggingConfig
 from .utils import init_loggers
-from func_timeout import func_set_timeout, exceptions
+from func_timeout import func_set_timeout
 from importlib.metadata import entry_points
 from typeguard import typechecked
 import json
@@ -10,9 +10,11 @@ import logging
 import logging.handlers
 import os
 import sys
-        
+
 loaded_plugins: list[LoadedPlugin] = []
 
+
+@typechecked
 def init(config_file: str = 'config.json', config_schema_file: str = 'config_schema.json'):
     with ExitStack() as stack:
         script_dir = os.path.dirname(os.path.abspath(__file__))
@@ -38,7 +40,7 @@ def init(config_file: str = 'config.json', config_schema_file: str = 'config_sch
         plugin_entry_points = config.get('plugin_entry_points', [])
 
         # Merge defaults with each plugin's configuration
-        # Track plugin names, and if non unique name is provided in config, raise a ValueError
+        # Track plugin names, and if non-unique name is provided in config, raise a ValueError
         plugin_names = set()
         for plugin_config in config.get('plugins', []):
             if plugin_config["name"] in plugin_names:
@@ -58,14 +60,18 @@ def init(config_file: str = 'config.json', config_schema_file: str = 'config_sch
 
         logging_config_json = config.get('logging', {})
         logging_config = LoggingConfig(
-            log_dir = script_dir,
-            log_file_base_name = logging_config_json.get('log_file_base_name'),
-            level = logging_config_json.get('level'),
-            quiet = bool(logging_config_json.get('quiet')),
-            format = logging_config_json.get('format')
+            log_dir=script_dir,
+            log_file_base_name=logging_config_json.get('log_file_base_name'),
+            level=logging_config_json.get('level'),
+            quiet=bool(logging_config_json.get('quiet')),
+            format=logging_config_json.get('format')
         )
+
+        # initialize loggers using logging config
         init_loggers(logging_config)
 
+        # iterate over plugin entry points, create an instance for each of them
+        # and put into the list of loaded plugins
         for entry_point in plugin_entry_points:
             discovered_plugins = entry_points(group=entry_point)
 
@@ -83,27 +89,30 @@ def init(config_file: str = 'config.json', config_schema_file: str = 'config_sch
                     print(f'loaded_plugin: {loaded_plugin.name}; priority: {priority}')
                     logging.info(f'loaded_plugin: {loaded_plugin.name}; priority: {priority}')
 
-    def validate_config(schema: object, config: object):
-        try:
-            validate(instance = config, schema = schema)
-        except Exception as e:
-            logging.error(f'Config validation error: {e}')
-            sys.exit(1030)
+
+def validate_config(schema: object, config: object):
+    try:
+        validate(instance=config, schema=schema)
+    except Exception as e:
+        logging.error(f'Config validation error: {e}')
+        sys.exit(1030)
+
 
 @typechecked
 def get_loaded_plugins() -> list[LoadedPlugin]:
     return sorted(loaded_plugins, key=lambda p: (p.priority, p.name))
 
-@func_set_timeout(10, allowOverride = True)
+
+@func_set_timeout(10, allowOverride=True)
 @typechecked
 def exec_plugin(plugin: LoadedPlugin):
     """Execute plugin's run method. Default timeout is 10 seconds, but can be overriden by config"""
     logging.info(f'plugin {plugin.name} with priority {plugin.priority}')
     plugin.new_instance().run()
 
+
 __all__ = [
     'LoadedPlugin',
     'LoggingConfig',
-    'get_loaded_plugins',
-    'exec_loaded_plugins'
+    'get_loaded_plugins'
 ]
