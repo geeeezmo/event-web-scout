@@ -15,15 +15,15 @@ loaded_plugins: list[LoadedPlugin] = []
 
 
 @typechecked
-def init(config_file: str = 'config.json', config_schema_file: str = 'config_schema.json'):
+def init(config_file_name: str = 'config.json', config_schema_file_name: str = 'config_schema.json'):
     with ExitStack() as stack:
         script_dir = os.path.dirname(os.path.abspath(__file__))
 
         try:
-            schema_file = stack.enter_context(open(os.path.join(script_dir, config_schema_file), 'r'))
+            schema_file = stack.enter_context(open(os.path.join(script_dir, config_schema_file_name), 'r'))
             config_schema = json.load(schema_file)
 
-            config_file = stack.enter_context(open(os.path.join(script_dir, config_file), 'r'))
+            config_file = stack.enter_context(open(os.path.join(script_dir, config_file_name), 'r'))
             config = json.load(config_file)
         except FileNotFoundError as e:
             logging.error(f'File does not exist: {e}')
@@ -114,5 +114,7 @@ def exec_plugin(plugin: LoadedPlugin):
 __all__ = [
     'LoadedPlugin',
     'LoggingConfig',
-    'get_loaded_plugins'
+    'init',
+    'get_loaded_plugins',
+    'exec_plugin'
 ]
