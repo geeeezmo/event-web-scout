@@ -1,3 +1,5 @@
+docs/adr/.adr-dir
+
 event_web_scout/config.json
 
 *.iml

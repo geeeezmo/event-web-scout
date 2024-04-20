@@ -8,6 +8,21 @@
 
 ![PyPI - Version](https://img.shields.io/pypi/v/event-web-scout?label=PyPI%20version)
 
+<!-- TOC -->
+* [event-web-scout](#event-web-scout)
+  * [Installing locally for development](#installing-locally-for-development)
+  * [Configuring the installation](#configuring-the-installation)
+    * [Configuration example JSON](#configuration-example-json)
+<!-- TOC -->
+
+## Installing locally for development
+The easiest way to get going with developing is to install the package locally using [venv](https://docs.python.org/3/library/venv.html):
+1. `python -m venv /path/to/new/virtual/environment`
+2. `source /path/to/new/virtual/environment/bin/activate`
+3. `pip3 install -e .`
+4. `pip3 install -e plugins/example-plugin/.`
+
+## Configuring the installation
 Configuration is a JSON with 4 elements:
 - `logging` - logging config
   - `level` - logging level (defaults to `ERROR` if not provided)
@@ -24,7 +39,7 @@ Configuration is a JSON with 4 elements:
   - `enabled` - whether the plugin is enabled
   - `config` - individual plugin configuration; will be passed to the plugin constructor as the first argument
 
-
+### Configuration example JSON
 ```json
 {
   "logging": {
