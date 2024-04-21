@@ -29,6 +29,7 @@ init()
 loaded_plugins = get_loaded_plugins()
 
 
+@pytest.mark.slow
 def test_stable_example_plugin(install_dependencies):
     assert len(loaded_plugins) == 1
 
@@ -37,6 +38,7 @@ def test_stable_example_plugin(install_dependencies):
     exec_plugin(plugin)
 
 
+@pytest.mark.slow
 def test_timeout_example_plugin(install_dependencies):
     assert len(loaded_plugins) == 1
 

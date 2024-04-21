@@ -2,6 +2,7 @@ from event_web_scout.plugin_interface import PluginInterface
 import logging
 import time
 
+
 class Plugin(PluginInterface):
     name: str = 'ExamplePlugin'
 
