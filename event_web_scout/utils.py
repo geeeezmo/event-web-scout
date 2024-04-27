@@ -12,9 +12,9 @@ TIMEZONE = tz.gettz('Europe/Helsinki')
 @typechecked
 def init_loggers(config: LoggingConfig):
     log_level = logging.ERROR
-    if not config.quiet and config.level is not None:
-        log_level = config.level.upper()
-    log_format = config.format or LOG_FORMAT
+    if not config.quiet and config.log_level is not None:
+        log_level = config.log_level.upper()
+    log_format = config.log_format or LOG_FORMAT
     logging.basicConfig(format=log_format, level=log_level)
     formatter = logging.Formatter(log_format)
 

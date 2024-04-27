@@ -62,9 +62,9 @@ def init(config_file_name: str = 'config.json', config_schema_file_name: str = '
         logging_config = LoggingConfig(
             log_dir=script_dir,
             log_file_base_name=logging_config_json.get('log_file_base_name'),
-            level=logging_config_json.get('level'),
+            log_level=logging_config_json.get('level'),
             quiet=bool(logging_config_json.get('quiet')),
-            format=logging_config_json.get('format')
+            log_format=logging_config_json.get('format')
         )
 
         # initialize loggers using logging config

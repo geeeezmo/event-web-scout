@@ -1,9 +1,9 @@
-from event_web_scout.plugin_interface import PluginInterface
+from event_web_scout.plugin_base import PluginBase
 import logging
 import time
 
 
-class Plugin(PluginInterface):
+class ExamplePlugin(PluginBase):
     name: str = 'ExamplePlugin'
 
     def __init__(self, config: dict):
