@@ -37,7 +37,7 @@ jobs:
       with:
         python-version: '3.12'
     - name: Install dependencies
-      uses: Wandalen/wretry.action@v1.3.0
+      uses: Wandalen/wretry.action@v3.4.0
       with:
         command: |
           python -m pip install --upgrade pip
@@ -53,7 +53,7 @@ jobs:
       run: >-
         python -m build
     - name: Publish distribution 📦 to PyPI
-      uses: pypa/gh-action-pypi-publish@v1.8.10
+      uses: pypa/gh-action-pypi-publish@v1.8.14
       with:
         packages-dir: ${{ github.workspace }}/${{ matrix.dir }}/dist/
         verbose: true
