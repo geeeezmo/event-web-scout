@@ -31,7 +31,7 @@ def init_loggers(config: LoggingConfig):
 
     # Create a console handler
     console_handler = logging.StreamHandler()
-    console_handler.setLevel(logging.ERROR)
+    console_handler.setLevel(log_level)
     console_handler.setFormatter(formatter)
 
     root = logging.getLogger()

@@ -1,4 +1,4 @@
-from .plugin_base import PluginBase
+import json
 
 
 class LoggingConfig:
@@ -11,12 +11,24 @@ class LoggingConfig:
         self.log_format = log_format
 
 
-class LoadedPlugin:
-    def __init__(self, priority: int, name: str, config: dict, _class: PluginBase):
-        self.priority = priority
-        self.name = name
-        self.config = config
-        self._class = _class
+class EventEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, Event):
+            return {
+                'summary': obj.summary,
+                'description': obj.description
+            }
+        # Let the base class default method raise the TypeError
+        return super().default(obj)
 
-    def new_instance(self) -> PluginBase:
-        return self._class(self.config)
+
+class Event:
+    def __init__(
+            self,
+            summary: str,
+            description: str):
+        self.summary = summary
+        self.description = description
+
+    def to_json(self):
+        return json.dumps(self.__dict__, cls=EventEncoder)

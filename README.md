@@ -13,6 +13,8 @@
   * [Installing locally for development](#installing-locally-for-development)
   * [Configuring the installation](#configuring-the-installation)
     * [Configuration example JSON](#configuration-example-json)
+  * [Testing](#testing)
+  * [References](#references)
 <!-- TOC -->
 
 ## Installing locally for development
@@ -23,7 +25,7 @@ The easiest way to get going with developing is to install the package locally u
 4. `pip3 install -e plugins/example-plugin/.`
 
 ## Configuring the installation
-Configuration is a JSON with 4 elements:
+Configuration is a JSON object:
 - `logging` - logging config
   - `level` - logging level (defaults to `ERROR` if not provided)
   - `log_file_base_name` - base name of the logging file (defaults to `event_web_scout`); will be suffixed with the date of the script launch and `.log`
@@ -49,7 +51,8 @@ Configuration is a JSON with 4 elements:
     "format": "[%(levelname)s][%(name)s]%(asctime)s - %(message)s"
   },
   "plugin_entry_points": [
-    "example_plugins"
+    "example_plugins",
+    "core_plugins"
   ],
   "plugin_execution": {
     "timeout_seconds": 30
@@ -81,6 +84,10 @@ Configuration is a JSON with 4 elements:
 }
 ```
 
+## Testing
+Tests are written with [PyTest](https://docs.pytest.org).
+
+## References
 JSON schema generation was done using these tools:
 - [Transform](https://transform.tools/json-to-json-schema)
 - [Code Beautify](https://codebeautify.org/json-to-json-schema-generator)

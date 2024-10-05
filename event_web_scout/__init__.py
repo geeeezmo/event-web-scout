@@ -1,6 +1,9 @@
 from contextlib import ExitStack
+from typing import Any
+
 from jsonschema import validate
-from .models import LoadedPlugin, LoggingConfig
+from .models import LoggingConfig
+from .plugin_base import LoadedPlugin
 from .utils import init_loggers
 from func_timeout import func_set_timeout
 from importlib.metadata import entry_points
@@ -18,6 +21,7 @@ loaded_plugins: list[LoadedPlugin] = []
 def init(config_file_name: str = 'config.json', config_schema_file_name: str = 'config_schema.json'):
     with ExitStack() as stack:
         script_dir = os.path.dirname(os.path.abspath(__file__))
+        loaded_plugins.clear()
 
         try:
             schema_file = stack.enter_context(open(os.path.join(script_dir, config_schema_file_name), 'r'))
@@ -28,11 +32,11 @@ def init(config_file_name: str = 'config.json', config_schema_file_name: str = '
         except FileNotFoundError as e:
             logging.error(f'File does not exist: {e}')
             sys.exit(1000)
-        except json.JSONDecodeError as jde:
-            logging.error(f'Could not decode JSON: {jde}')
+        except json.JSONDecodeError as e:
+            logging.error(f'Could not decode JSON: {e}')
             sys.exit(1010)
-        except TypeError as te:
-            logging.error(f'Could not decode JSON: {te}')
+        except TypeError as e:
+            logging.error(f'Could not decode JSON: {e}')
             sys.exit(1020)
 
         validate_config(config_schema, config)
@@ -53,7 +57,7 @@ def init(config_file_name: str = 'config.json', config_schema_file_name: str = '
                 plugin_config.update(merged_config)
 
         plugin_configs = config.get('plugins', [])
-        # print(f'plugin_configs: {plugin_configs}')
+        logging.debug(f'plugin_configs: {plugin_configs}')
 
         # validate config again after merging individual plugin configs with the defaults
         validate_config(config_schema, config)
@@ -78,16 +82,14 @@ def init(config_file_name: str = 'config.json', config_schema_file_name: str = '
             logging.info(f'discovered_plugins for entry point {entry_point}: {discovered_plugins}')
 
             for plugin in discovered_plugins:
-                # print(f'discovered plugin: {plugin}')
                 plugin_config = next((pc for pc in plugin_configs if pc.get('name') == plugin.name), None)
-                # print(f'plugin_config: {plugin_config}')
+                logging.debug(f'config for plugin {plugin.name}: {plugin_config}')
                 if plugin_config is not None and plugin_config.get('enabled') is True:
                     priority = plugin_config.get('priority')
                     plugin_class = plugin.load()
                     loaded_plugin = LoadedPlugin(priority, plugin.name, plugin_config.get('config', {}), plugin_class)
                     loaded_plugins.append(loaded_plugin)
-                    print(f'loaded_plugin: {loaded_plugin.name}; priority: {priority}')
-                    logging.info(f'loaded_plugin: {loaded_plugin.name}; priority: {priority}')
+                    logging.info(f'Loaded plugin \'{loaded_plugin.name}\' with priority: {priority}')
 
 
 def validate_config(schema: object, config: object):
@@ -105,10 +107,10 @@ def get_loaded_plugins() -> list[LoadedPlugin]:
 
 @func_set_timeout(10, allowOverride=True)
 @typechecked
-def exec_plugin(plugin: LoadedPlugin):
+def exec_plugin(plugin: LoadedPlugin) -> Any:
     """Execute plugin's run method. Default timeout is 10 seconds, but can be overriden by config"""
     logging.info(f'plugin {plugin.name} with priority {plugin.priority}')
-    plugin.new_instance().run()
+    return plugin.new_instance().run()
 
 
 __all__ = [

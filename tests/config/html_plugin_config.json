@@ -4,11 +4,10 @@
     "log_file_base_name": "event_web_scout"
   },
   "plugin_entry_points": [
-    "example_plugins",
     "core_plugins"
   ],
   "plugin_execution": {
-    "timeout_seconds": 30
+    "timeout_seconds": 3
   },
   "plugin_defaults": {
     "priority": 10,
@@ -20,11 +19,12 @@
   },
   "plugins": [
     {
-      "name": "example_plugin",
+      "name": "example_html_plugin",
       "priority": 3,
       "enabled": true,
       "config": {
-        "example_prop_1": "example_value_1"
+        "base_url": "http://localhost/test-html-plugin",
+        "sleep_time": 5
       }
     }
   ]
