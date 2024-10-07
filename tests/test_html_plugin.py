@@ -5,10 +5,9 @@ import os
 from contextlib import ExitStack
 
 import pytest
-# from bs4 import BeautifulSoup
 from pytest_httpserver import HTTPServer
 
-from event_web_scout import init, get_loaded_plugins, exec_plugin, LoadedPlugin
+from event_web_scout import init, get_loaded_plugins, exec_plugin
 from event_web_scout.models import Event
 from test_utils import install_dependencies, random_string
 
