@@ -4,23 +4,25 @@ import logging
 import os
 from contextlib import ExitStack
 
-import pytest
 from pytest_httpserver import HTTPServer
+import pytest
 
 from event_web_scout import init, get_loaded_plugins, exec_plugin
-from event_web_scout.models import Event
+from event_web_scout.models import Event, EventEncoder
 from test_utils import install_dependencies, random_string
 
 
 @pytest.fixture(scope="module", autouse=True)
 def install_deps(request):
-    result = install_dependencies(['plugins/html-plugin'], ['pytest_httpserver==1.0.10'])
+    result = install_dependencies(['plugins/html-plugin'], ['pytest_httpserver==1.1.0'])
     # Yield control back to the test
     yield result
 
 
 init(config_file_name='../tests/config/html_plugin_config.json')
 loaded_plugins = get_loaded_plugins()
+
+expected_event_json = '{"summary": "Mock document title", "description": "Mock document description", "start": "2024-10-14 12:34:56 UTC", "end": "2024-10-14 20:19:18 UTC", "source": {"url": "/basic.html", "title": "basic.html"}}'
 
 
 def test_html_plugin_200_response(install_deps, httpserver: HTTPServer):
@@ -49,8 +51,7 @@ def test_html_plugin_200_response(install_deps, httpserver: HTTPServer):
             if isinstance(response, list):
                 assert len(response) == 1
                 event = response[0]
-                assert (isinstance(event, Event) and
-                        event.to_json() == '{"summary": "Mock document title", "description": "Mock document body"}')
+                assert (isinstance(event, Event) and event.to_json(EventEncoder) == expected_event_json)
 
         except FileNotFoundError as e:
             pytest.fail(f'Required HTML file not found: {e}')
@@ -88,8 +89,7 @@ def test_html_plugin_3xx_response(install_deps, httpserver: HTTPServer, http_cod
             if isinstance(response, list):
                 assert len(response) == 1
                 event = response[0]
-                assert (isinstance(event, Event) and
-                        event.to_json() == '{"summary": "Mock document title", "description": "Mock document body"}')
+                assert (isinstance(event, Event) and event.to_json(EventEncoder) == expected_event_json)
 
         except FileNotFoundError as e:
             pytest.fail(f'Required HTML file not found: {e}')
